@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
@@ -103,10 +101,8 @@ public class MainView extends JFrame implements Contract.View {
         RoundedButton buttonOptions = new RoundedButton("Opciones");
         buttonOptions.setPreferredSize(new java.awt.Dimension(150, 50));
         buttonOptions.addActionListener(e -> {
-            if (!presenter.otherClients()) {
-                createInputPanel();
-                buttonOptions.setEnabled(false);
-            }
+            createInputPanel();
+            buttonOptions.setEnabled(false);
         });
         panel.add(buttonOptions);
     }
@@ -123,6 +119,7 @@ public class MainView extends JFrame implements Contract.View {
     private void addTextManual() {
         JOptionPane.showMessageDialog(null,
                 "(Las entradas para velocidady tiempo de aparicion están en millisegundos) \n" +
+                        "Favor ingresar nombres diferentes para cada cliente. " +
                         "1. Ingrese el número de naves que desea que aparezcan en pantalla.\n"
                         + "2. Ingrese el tiempo de aparición de las naves.\n"
                         + "3. Ingrese la velocidad de las naves.\n"
@@ -307,6 +304,8 @@ public class MainView extends JFrame implements Contract.View {
         dialogPlay.informationPlay.updateInformationPlay();
     }
 
-
-    
+    @Override
+    public void repaintInformationPlay(int numberOfShips, int velocity, int aparitionTime) {
+        dialogPlay.informationPlay.repaintInformationPlay(numberOfShips, velocity, aparitionTime);
+    }
 }

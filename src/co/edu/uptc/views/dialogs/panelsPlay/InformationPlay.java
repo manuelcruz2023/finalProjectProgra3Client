@@ -23,6 +23,9 @@ public class InformationPlay extends BackgroundPanel {
     private List<String> clients;
     private String[] columnNames;
     private JTable table;
+    private int numberOfShips = 0;
+    private int velocity = 0;
+    private int aparitionTime = 0;
 
     public InformationPlay(MainView mainView) {
         super("resources\\backgroundInformation.png");
@@ -49,7 +52,7 @@ public class InformationPlay extends BackgroundPanel {
 
     private void addLabelNumShips() {
         JLabel label = new JLabel("<html><div style='text-align: center;'>Número de OVNIS: " +
-                mainView.presenter.numberOfShips() + "</div></html>");
+                numberOfShips + "</div></html>");
         label.setPreferredSize(new Dimension(100, 150));
         label.setFont(new Font("Arial", Font.BOLD, 20));
         label.setForeground(Color.WHITE);
@@ -59,7 +62,7 @@ public class InformationPlay extends BackgroundPanel {
 
     private void addLabelAparitionTime() {
         JLabel label = new JLabel("<html><div style='text-align: center;'>Tiempo de aparición de OVNIS:"
-                + mainView.aparitionTime + " ms</div></html>");
+                + aparitionTime + " ms</div></html>");
         label.setPreferredSize(new Dimension(100, 150));
         label.setFont(new Font("Arial", Font.BOLD, 20));
         label.setForeground(Color.WHITE);
@@ -69,7 +72,8 @@ public class InformationPlay extends BackgroundPanel {
 
     private void addLabelVelocity() {
         JLabel label = new JLabel(
-                "<html><div style='text-align: center;'>Velocidad de OVNIS: " + mainView.presenter.velocity() + "ms</div></html>");
+                "<html><div style='text-align: center;'>Velocidad de OVNIS: " + velocity
+                        + "ms</div></html>");
         label.setPreferredSize(new Dimension(100, 150));
         label.setFont(new Font("Arial", Font.BOLD, 20));
         label.setForeground(Color.WHITE);
@@ -120,10 +124,23 @@ public class InformationPlay extends BackgroundPanel {
         }
         Object[][] data = new Object[clients.size()][1];
         for (int i = 0; i < clients.size(); i++) {
-            data[i][0] = clients.get(i); 
+            data[i][0] = clients.get(i);
         }
         table = new JTable(data, columnNames);
         scrollPane.setViewportView(table);
+        this.revalidate();
+        this.repaint();
+    }
+
+    public void repaintInformationPlay(int numberOfShips, int velocity, int aparitionTime) {
+        this.numberOfShips = mainView.presenter.getNumberOfShips();
+        this.velocity = mainView.presenter.getVelocity();
+        this.aparitionTime = mainView.presenter.getAparitionTime();
+        System.out.println("Numero de ovnis: " + numberOfShips);
+        System.out.println("Velocidad de ovnis: " + velocity);
+        System.out.println("Tiempo de aparicion de ovnis: " + aparitionTime);
+        this.removeAll();
+        addLabels();
         this.revalidate();
         this.repaint();
     }

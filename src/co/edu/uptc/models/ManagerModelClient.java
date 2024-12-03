@@ -16,16 +16,18 @@ public class ManagerModelClient implements Contract.Model {
     private Contract.Presenter presenter;
     public Socket socket;
     ObjectInputStream in;
-    @SuppressWarnings("unused")
-    private int velocity = 1000;
     private ObjectOutputStream out;
     private Net net;
     public Boolean isRunning = true;
     List<Ship> shipsUp;
+    private int numberOfShips = 0;
+    private int velocity = 0;
+    private int aparitionTime = 0;
     private int totalShipsOnScreen;
     private int totalShipsCrashed;
     private List<String> clientsNames = new ArrayList<>();
     private String name;
+    private boolean first = false;
 
     public ManagerModelClient(String host, int port, String name) throws UnknownHostException, IOException {
         this.name = name;
@@ -45,9 +47,16 @@ public class ManagerModelClient implements Contract.Model {
     public void createShips() throws IOException, ClassNotFoundException {
         out.writeObject("CREATE_SHIPS");
         out.flush();
-        int message = in.readInt();
-        if (message == 1) {
+        String message = in.readUTF();
+        if (message.equals(name)) {
+            first = true;
             out.writeObject("yes");
+
+            numberOfShips = presenter.getNumberOfShips();
+            velocity = presenter.getVelocity();
+            aparitionTime = presenter.getAparitionTime();
+            presenter.repaintInformationPlay(numberOfShips, velocity, aparitionTime);
+
             out.writeObject(presenter.getNumberOfShips());
             velocity = presenter.getVelocity();
             out.writeObject(presenter.getVelocity());
@@ -64,11 +73,16 @@ public class ManagerModelClient implements Contract.Model {
             String arrayShips = in.readUTF();
             shipsUp = net.getMyGson().fromJson(arrayShips, new TypeToken<List<Ship>>() {
             }.getType());
+
+            int numberOfShipsIn = in.readInt();
+            int velocityIn = in.readInt();
+            int aparitionTimeIn = in.readInt();
+            presenter.repaintInformationPlay(numberOfShipsIn, velocityIn, aparitionTimeIn);
+            
             presenter.updateShips(shipsUp);
         }
         presenter.updateShips(shipsUp);
         presenter.changePosition();
-        System.out.println();
         update();
     }
 
@@ -125,6 +139,7 @@ public class ManagerModelClient implements Contract.Model {
                 out.writeInt(x);
                 out.writeInt(y);
                 out.writeInt(index);
+                //UtilThread.sleep(ship.getVelocity());
             }
         }
     }
@@ -151,5 +166,25 @@ public class ManagerModelClient implements Contract.Model {
     @Override
     public List<String> getListClientsNames() {
         return clientsNames;
+    }
+
+    @Override
+    public int setNumberOfShips() {
+        return this.numberOfShips;
+    }
+
+    @Override
+    public int setVelocity() {
+        return this.velocity;
+    }
+
+    @Override
+    public int setAparitionTime() {
+        return this.aparitionTime;
+    }
+
+    @Override
+    public boolean isFirst() {
+        return first;
     }
 }

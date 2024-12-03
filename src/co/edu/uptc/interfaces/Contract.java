@@ -24,6 +24,9 @@ public interface Contract {
 
         public void updateTotalShipsOnScreen(int totalShips);
         public void updateTotalShipsCrashed(int totalCrashed);
+
+        
+        public void repaintInformationPlay(int numberOfShips, int velocity, int aparitionTime);
     }
 
     public interface Presenter {
@@ -40,10 +43,6 @@ public interface Contract {
         public int getVelocity();
         public int getAparitionTime();
 
-        public int numberOfShips();
-        public int velocity();
-        public int aparitionTime();
-
         public void changePosition();
         public Dimension getScreenSize();
         public void createShips();
@@ -56,28 +55,30 @@ public interface Contract {
 
         public void updateShips(List<Ship> ships);
         public List<Ship> getShips();
-        public boolean otherClients();
+
+        public int setNumberOfShips();
+        public int setVelocity();
+        public int setAparitionTime();
+
+        public boolean isFirst();
+        public void repaintInformationPlay(int numberOfShips, int velocity, int aparitionTime);
     }
 
     public interface Model {
         public void setPresenter(Contract.Presenter presenter);
-
-        public int numberOfShips();
-        public int velocity();
-        public int aparitionTime();
-
         public List<String> getListClientsNames();
         public void createShips() throws IOException, ClassNotFoundException;
-
         public void changeVelocity(Ship ship, int velocity, int index) throws IOException;
         public void updateShipPosition(Ship ship, int x, int y, int index) throws IOException;
         public void continueMovement(Ship ship, int index) throws IOException ;
-
         int getTotalShipsOnScreen();
         int getTotalShipsCrashed();
-
         public void update();
 
-        public boolean otherClients();
+        public int setNumberOfShips();
+        public int setVelocity();
+        public int setAparitionTime();
+
+        public boolean isFirst();
     }
 }

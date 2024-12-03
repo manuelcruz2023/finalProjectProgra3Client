@@ -133,22 +133,27 @@ public class Presenter implements Contract.Presenter {
     }
 
     @Override
-    public int numberOfShips() {
-        return model.numberOfShips();
+    public int setNumberOfShips() {
+        return model.setNumberOfShips();
     }
 
     @Override
-    public int velocity() {
-        return model.velocity();
+    public int setVelocity() {
+        return model.setVelocity();
     }
 
     @Override
-    public int aparitionTime() {
-        return model.aparitionTime();
+    public int setAparitionTime() {
+        return model.setAparitionTime();
     }
 
     @Override
-    public boolean otherClients() {
-        return model.otherClients();
+    public void repaintInformationPlay(int numberOfShips, int velocity, int aparitionTime) {
+        view.repaintInformationPlay(numberOfShips, velocity, aparitionTime);
+    }
+
+    @Override
+    public boolean isFirst() {
+        return model.isFirst();
     }
 }
